@@ -8,6 +8,9 @@ pub fn parse(code: &str) -> Result<Program, peg::error::ParseError<peg::str::Lin
 peg::parser! {
 	grammar program_parser() for str {
 
+		//  PROGRAM
+		//  =======
+
 		/// The rule for parsing a program
 		pub rule program() -> Program
 			= decls:decl()* { Program::new(
@@ -16,18 +19,33 @@ peg::parser! {
 					.collect()
 			)}
 		
+		
+		//  DECLARATIONS
+		//  ============
+
 		/// The rule for parsing a declaration
 		/// Returns `None` if it parses a comment
 		/// or a newline
 		rule decl() -> Option<Decl>
-			= _:("#" [^ '\n']*)? "\n" { None }
+			= _comment:("#" [^ '\n']*)? "\n" { None }
 			/ "pat" _ id:ident() _ "=" __ pat:pattern() ___ { None }
 		
+		
+		//  PATTERNS
+		//  ========
+
 		/// The rule for parsing a pattern
 		rule pattern() -> ()
-			= "\"Hello, world!\""
-		
+			= string()
+			
+			
+		//  TOKENS
+		//  ======
+
 		/// The rule for parsing an identifier
+		rule string() -> ()
+			= "\"" [^ '"']* "\""
+		
 		rule ident() -> String
 			= id:$(
 				(['a'..='z'] / ['A'..='Z']) // Starts with a alpha
