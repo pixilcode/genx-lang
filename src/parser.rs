@@ -42,10 +42,11 @@ peg::parser! {
 		//  TOKENS
 		//  ======
 
-		/// The rule for parsing an identifier
+		/// The rule for parsing a string
 		rule string() -> ()
 			= "\"" [^ '"']* "\""
 		
+		/// The rule for parsing an identifier
 		rule ident() -> String
 			= id:$(
 				(['a'..='z'] / ['A'..='Z']) // Starts with a alpha
