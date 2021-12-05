@@ -4,13 +4,15 @@ use std::io;
 
 use structopt::StructOpt;
 
+mod ast;
+
 fn main() -> io::Result<()> {
     let config = Config::from_args();
 
     let code = &fs::read(config.code_file)?;
     let code = String::from_utf8_lossy(code);
 
-    println!("{}", code);
+    println!("{:?}", ast::parse(&code));
     Ok(())
 }
 
