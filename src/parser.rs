@@ -51,6 +51,10 @@ peg::parser! {
 				(['a'..='z'] / ['A'..='Z']) // Starts with a alpha
 				(['a'..='z'] / ['A'..='Z'] / ['0'..='9'])* // Can contain alphanumeric
 			) { id.to_string() }
+		
+		
+		//  WHITESPACE
+		//  ==========
 
 		/// The rule for whitespace (newlines not allowed)
 		rule _() -> Vec<()>
