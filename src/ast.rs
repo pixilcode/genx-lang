@@ -1,8 +1,5 @@
 mod program;
+mod decl;
 
-pub fn parse(code: &str) -> Program {
-	Program {}
-}
-
-#[derive(Debug)]
-pub struct Program {}
+pub use program::Program;
+pub use decl::Decl;

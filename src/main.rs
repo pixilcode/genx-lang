@@ -5,6 +5,7 @@ use std::io;
 use structopt::StructOpt;
 
 mod ast;
+mod parser;
 
 fn main() -> io::Result<()> {
     let config = Config::from_args();
@@ -12,7 +13,7 @@ fn main() -> io::Result<()> {
     let code = &fs::read(config.code_file)?;
     let code = String::from_utf8_lossy(code);
 
-    println!("{:?}", ast::parse(&code));
+    println!("{:?}", parser::parse(&code));
     Ok(())
 }
 
