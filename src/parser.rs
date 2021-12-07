@@ -28,14 +28,14 @@ peg::parser! {
 		/// or a newline
 		rule decl() -> Option<Decl>
 			= _comment:("#" [^ '\n']*)? "\n" { None }
-			/ "pat" _ id:ident() _ "=" __ pat:pattern() ___ { None }
+			/ "pat" _ "$" id:ident() _ "=" __ pat:expr() ___ { None }
 		
 		
 		//  PATTERNS
 		//  ========
 
 		/// The rule for parsing a pattern
-		rule pattern() -> ()
+		rule expr() -> ()
 			= string()
 			
 			

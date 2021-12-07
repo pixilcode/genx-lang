@@ -1,2 +1,2 @@
 # Prints out "Hello, world!"
-pat Main = "Hello, world!"
+pat $Main = "Hello, world!"
