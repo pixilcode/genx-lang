@@ -43,14 +43,16 @@ peg::parser! {
 
 		/// The rule for parsing a string
 		rule string() -> String
-			= "\"" s:$([^ '"']*) "\"" { s.into() }
+			= quiet! { "\"" s:$([^ '"']*) "\"" { s.into() } }
+			/ expected!("a string")
 		
 		/// The rule for parsing an identifier
 		rule ident() -> Ident
-			= id:$(
+			= quiet! { id:$(
 				(['a'..='z'] / ['A'..='Z']) // Starts with a alpha
 				(['a'..='z'] / ['A'..='Z'] / ['0'..='9'])* // Can contain alphanumeric
-			) { id.to_string() }
+			) { id.to_string() } }
+			/ expected!("an identifier")
 		
 		
 		//  WHITESPACE
@@ -58,14 +60,14 @@ peg::parser! {
 
 		/// The rule for whitespace (newlines not allowed)
 		rule _() -> Vec<()>
-			= (" " / "\t")*
+			= quiet! { (" " / "\t")* }
 		
 		/// The rule for whitespace (newlines optional)
 		rule __() -> Vec<()>
-			= (" " / "\t" / "\r"? "\n")*
+			= quiet! { (" " / "\t" / "\r"? "\n")*}
 		
 		/// The rule for whitespace (newlines required)
 		rule ___() -> Vec<()>
-			= ((" " / "\t")* "\r"? "\n")+
+			= quiet! { ((" " / "\t")* "\r"? "\n")+ }
 	}
 }
