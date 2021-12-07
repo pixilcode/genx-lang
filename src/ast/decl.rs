@@ -1,2 +1,6 @@
+use crate::ast::Expr;
+
 #[derive(Debug, Clone)]
-pub struct Decl {}
+pub enum Decl {
+	ExprPattern(Expr)
+}
