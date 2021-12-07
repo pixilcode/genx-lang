@@ -1,0 +1,2 @@
+# Prints out the integer 100
+pat $Main = 100
