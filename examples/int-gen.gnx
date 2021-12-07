@@ -1,4 +1,2 @@
-# generate an integer between 0 and 100
-pat $Main = $IntMod100
-
-pat $IntMod100 = $Int % 100
+# generate an integer
+pat $Main = $Int
