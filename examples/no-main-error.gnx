@@ -1,0 +1,2 @@
+# Error: no main pattern exists
+pat $NotMain = "this will fail"

@@ -2,6 +2,7 @@ use crate::ast;
 use std::collections::HashMap;
 use std::rc::Rc;
 use std::borrow::Borrow;
+use std::fmt;
 
 type Env = HashMap<ast::Ident, Rc<ast::Expr>>;
 
@@ -45,14 +46,19 @@ pub enum Value {
 }
 
 impl Value {
-
 	/// Create a string value
 	fn string(s: &str) -> Self {
 		Self::String(s.into())
 	}
 }
 
-
+impl fmt::Display for Value {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		match self {
+			Self::String(s) => write!(f, "{}", s),
+		}
+	}
+}
 
 /// An evaluation error
 /// 
@@ -61,4 +67,13 @@ impl Value {
 #[derive(Debug, Clone, Copy)]
 pub enum EvalError {
 	NoMain,
+}
+
+impl fmt::Display for EvalError {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		write!(f, "[eval error] ")?;
+		match self {
+			EvalError::NoMain => write!(f, "no '$Main' pattern found"),
+		}
+	}
 }

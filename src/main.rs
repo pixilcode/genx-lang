@@ -19,8 +19,11 @@ fn main() -> io::Result<()> {
     match ast {
         Ok(ast) => {
             let result = evaluator::eval(ast);
-    
-            println!("{:?}", result);
+
+            match result {
+                Ok(result) => println!("{}", result),
+                Err(err) => eprintln!("{}", err),
+            }
         },
         Err(e) => { println!("{}", e); }
     }
