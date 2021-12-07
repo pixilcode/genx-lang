@@ -6,6 +6,7 @@ use structopt::StructOpt;
 
 mod ast;
 mod parser;
+mod evaluator;
 
 fn main() -> io::Result<()> {
     let config = Config::from_args();
@@ -13,7 +14,17 @@ fn main() -> io::Result<()> {
     let code = &fs::read(config.code_file)?;
     let code = String::from_utf8_lossy(code);
 
-    println!("{:?}", parser::parse(&code));
+    let ast = parser::parse(&code);
+
+    match ast {
+        Ok(ast) => {
+            let result = evaluator::eval(ast);
+    
+            println!("{:?}", result);
+        },
+        Err(e) => { println!("{}", e); }
+    }
+    
     Ok(())
 }
 
