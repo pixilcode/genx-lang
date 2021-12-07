@@ -5,3 +5,5 @@ mod expr;
 pub use program::Program;
 pub use decl::Decl;
 pub use expr::Expr;
+
+pub type Ident = String;

@@ -1,5 +1,4 @@
-use crate::ast::Program;
-use crate::ast::Decl;
+use crate::ast::{Program, Decl, Expr, Ident};
 
 pub fn parse(code: &str) -> Result<Program, peg::error::ParseError<peg::str::LineCol>> {
 	program_parser::program(code)
@@ -28,26 +27,26 @@ peg::parser! {
 		/// or a newline
 		rule decl() -> Option<Decl>
 			= _comment:("#" [^ '\n']*)? "\n" { None }
-			/ "pat" _ "$" id:ident() _ "=" __ pat:expr() ___ { None }
+			/ "pat" _ "$" id:ident() _ "=" __ pat:expr() ___ { Some(Decl::ExprPattern(id, pat)) }
 		
 		
 		//  PATTERNS
 		//  ========
 
 		/// The rule for parsing a pattern
-		rule expr() -> ()
-			= string()
+		rule expr() -> Expr
+			= s:string() { Expr::string(&s) }
 			
 			
 		//  TOKENS
 		//  ======
 
 		/// The rule for parsing a string
-		rule string() -> ()
-			= "\"" [^ '"']* "\""
+		rule string() -> String
+			= "\"" s:$([^ '"']*) "\"" { s.into() }
 		
 		/// The rule for parsing an identifier
-		rule ident() -> String
+		rule ident() -> Ident
 			= id:$(
 				(['a'..='z'] / ['A'..='Z']) // Starts with a alpha
 				(['a'..='z'] / ['A'..='Z'] / ['0'..='9'])* // Can contain alphanumeric
