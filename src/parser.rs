@@ -36,6 +36,7 @@ peg::parser! {
 		/// The rule for parsing a pattern
 		rule expr() -> Expr
 			= s:string() { Expr::string(&s) }
+			/ i:int() { Expr::int(i) }
 			
 			
 		//  TOKENS
@@ -45,6 +46,14 @@ peg::parser! {
 		rule string() -> String
 			= quiet! { "\"" s:$([^ '"']*) "\"" { s.into() } }
 			/ expected!("a string")
+
+		/// The rule for parsing an int
+		rule int() -> i32
+			= quiet! { i:$("0" / ['1'..='9']['0'..='9']*) {?
+				i.parse::<i32>().map_err(|_| "") // Error will be silenced, so this doesn't matter
+			} }
+			/ expected!("an integer")
+
 		
 		/// The rule for parsing an identifier
 		rule ident() -> Ident
@@ -59,15 +68,16 @@ peg::parser! {
 		//  ==========
 
 		/// The rule for whitespace (newlines not allowed)
-		rule _() -> Vec<()>
-			= quiet! { (" " / "\t")* }
+		rule _() -> ()
+			= quiet! { (" " / "\t")* { /* do nothing */ } }
 		
 		/// The rule for whitespace (newlines optional)
-		rule __() -> Vec<()>
-			= quiet! { (" " / "\t" / "\r"? "\n")*}
+		rule __() -> ()
+			= quiet! { (" " / "\t" / "\r"? "\n")* { /* do nothing */ } }
 		
 		/// The rule for whitespace (newlines required)
-		rule ___() -> Vec<()>
-			= quiet! { ((" " / "\t")* "\r"? "\n")+ }
+		rule ___() -> ()
+			= quiet! { ((" " / "\t")* "\r"? "\n")+ { /* do nothing */ } / ![_] { /* do nothing */ } }
+			/ expected!("a newline")
 	}
 }

@@ -35,6 +35,7 @@ fn get_main(env: &Env) -> Result<Rc<ast::Expr>, EvalError> {
 fn eval_expr(expr: &Rc<ast::Expr>, _env: &Env) -> Result<Value, EvalError> {
 	match expr.borrow() {
 		ast::Expr::String(s) => Ok(Value::string(s)),
+		ast::Expr::Int(i) => Ok(Value::int(*i)),
 	}
 }
 
@@ -43,6 +44,7 @@ fn eval_expr(expr: &Rc<ast::Expr>, _env: &Env) -> Result<Value, EvalError> {
 #[derive(Debug, Clone)]
 pub enum Value {
 	String(String),
+	Int(i32),
 }
 
 impl Value {
@@ -50,12 +52,18 @@ impl Value {
 	fn string(s: &str) -> Self {
 		Self::String(s.into())
 	}
+
+	/// Create an integer value
+	fn int(i: i32) -> Self {
+		Self::Int(i)
+	}
 }
 
 impl fmt::Display for Value {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		match self {
 			Self::String(s) => write!(f, "{}", s),
+			Self::Int(i) => write!(f, "{}", i),
 		}
 	}
 }

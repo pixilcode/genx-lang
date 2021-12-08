@@ -44,7 +44,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "genx-lang"
+name = "genx_lang"
 version = "0.1.0"
 dependencies = [
  "peg",
