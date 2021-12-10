@@ -1,0 +1,2 @@
+source_file = "hello-world.gnx"
+expected_out = "Hello, world!"
